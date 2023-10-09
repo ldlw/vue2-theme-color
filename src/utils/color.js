@@ -4,7 +4,7 @@ import elementFormula from './elementFormula'
 
 const version = require('element-ui/package.json').version // 版本号
 // element_ui默认的主题色
-let themeColor = '#1890ff'
+let themeColor = '#409EFF'
 // 所有element_ui的默认样式
 let themeChalk = null
 

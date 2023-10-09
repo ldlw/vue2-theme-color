@@ -2,19 +2,35 @@
   <div id="app">
     <div class="nav-top">
       <div class="nav-logo">
-        <img src="./assets/logo.png">
+        <img src="./assets/logo.png" />
       </div>
       <div class="nav-con">
-        <el-menu :default-active="activeIndex" :router="true" mode="horizontal" background-color="#000000" text-color="#ffffff" active-text-color="#42b983">
-          <el-menu-item v-for="item in navArr" :key="item.path" :index="item.path">{{item.name}}</el-menu-item>
+        <el-menu
+          :default-active="activeIndex"
+          :router="true"
+          mode="horizontal"
+          background-color="#000000"
+          text-color="#ffffff"
+          active-text-color="#42b983"
+        >
+          <el-menu-item
+            v-for="item in navArr"
+            :key="item.path"
+            :index="item.path"
+            >{{ item.name }}</el-menu-item
+          >
         </el-menu>
       </div>
       <div class="right">
         <span class="choice-color">主题颜色选择</span>
-        <el-color-picker v-model="themeColor" style="vertical-align: middle;" @change="handleChangeTheme"></el-color-picker>
+        <el-color-picker
+          v-model="themeColor"
+          style="vertical-align: middle"
+          @change="handleChangeTheme"
+        ></el-color-picker>
       </div>
     </div>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -40,12 +56,26 @@ export default {
     return {
       navArr: navList,
       activeIndex: '/home',
-      themeColor: '#409EFF'
+      themeColor: sessionStorage.getItem('themeColor') || '#409EFF'
     }
   },
+  mounted() {
+    // 刷新浏览器设置主题
+    changeThemeColor(this.themeColor)
+    this.setRootColor(this.themeColor)
+  },
   methods: {
+    setRootColor (color) {
+      // 获取全局 css 变量
+      // getComputedStyle(document.documentElement).getPropertyValue(`--primary-color`)
+      // 设置 css 变量
+      document.documentElement.style.setProperty('--primary-color', color)
+    },
+    // 手动设置主题
     handleChangeTheme(color) {
+      sessionStorage.setItem('themeColor', color)
       changeThemeColor(color)
+      this.setRootColor(color)
     }
   }
 }
@@ -53,7 +83,7 @@ export default {
 
 <style scoped="scoped" lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
@@ -73,8 +103,8 @@ export default {
     }
   }
 }
-.nav-con{
-  float:left;
+.nav-con {
+  float: left;
   margin-left: 20px;
   height: 60px;
 }
@@ -85,7 +115,7 @@ export default {
   margin-right: 100px;
   color: #42b983;
   .choice-color {
-   vertical-align: middle;
+    vertical-align: middle;
   }
 }
 </style>
