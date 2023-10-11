@@ -37,27 +37,10 @@
 </template>
 
 <script>
-import { changeThemeColor } from "./utils/color";
-const navList = [
-  {
-    name: "首页",
-    path: "/home",
-  },
-  {
-    name: "表单",
-    path: "/form",
-  },
-  {
-    name: "其他表单",
-    path: "/others",
-  },
-];
 export default {
   name: "App",
   data() {
     return {
-      navArr: navList,
-      activeIndex: "/home",
       theme: [
         { name: "--color-primary", value: "#409EFF" },
         { name: "--color-success", value: "#67C23A" },
@@ -69,15 +52,6 @@ export default {
   },
   mounted() {},
   methods: {
-    setRootColor(color) {
-      document.documentElement.style.setProperty("--primary-color", color);
-    },
-    // 手动设置主题
-    handleChangeTheme(color) {
-      sessionStorage.setItem("themeColor", color);
-      changeThemeColor(color);
-      this.setRootColor(color);
-    },
   },
   computed: {
     themeStyle() {
