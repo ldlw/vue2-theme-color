@@ -1,121 +1,134 @@
 <template>
-  <div id="app">
-    <div class="nav-top">
-      <div class="nav-logo">
-        <img src="./assets/logo.png" />
-      </div>
-      <div class="nav-con">
-        <el-menu
-          :default-active="activeIndex"
-          :router="true"
-          mode="horizontal"
-          background-color="#000000"
-          text-color="#ffffff"
-          active-text-color="#42b983"
-        >
-          <el-menu-item
-            v-for="item in navArr"
-            :key="item.path"
-            :index="item.path"
-            >{{ item.name }}</el-menu-item
-          >
-        </el-menu>
-      </div>
-      <div class="right">
-        <span class="choice-color">主题颜色选择</span>
-        <el-color-picker
-          v-model="themeColor"
-          style="vertical-align: middle"
-          @change="handleChangeTheme"
-        ></el-color-picker>
+  <div id="app" :style="themeStyle">
+    <div class="left">
+      <el-row>
+        <el-button type="primary">Primary</el-button>
+        <el-button type="success">Success</el-button>
+        <el-button type="info">Info</el-button>
+        <el-button type="warning">Warning</el-button>
+        <el-button type="danger">Danger</el-button>
+      </el-row>
+      <el-row>
+        <el-tag>Tag 1</el-tag>
+        <el-tag type="success">Tag 2</el-tag>
+        <el-tag type="info">Tag 3</el-tag>
+        <el-tag type="warning">Tag 4</el-tag>
+        <el-tag type="danger">Tag 5</el-tag>
+      </el-row>
+      <el-row>
+        <el-alert title="success alert" type="success"></el-alert>
+        <el-alert title="info alert" type="info"></el-alert>
+        <el-alert title="warning alert" type="warning"></el-alert>
+        <el-alert title="error alert" type="error"></el-alert>
+      </el-row>
+    </div>
+    <div class="right">
+      <div class="editor">
+        <div class="item" v-for="i in theme" :key="i.name">
+          <div class="label">{{ i.name }}</div>
+          <div class="content">
+            <el-input v-model="i.value"></el-input>
+            <el-color-picker v-model="i.value"></el-color-picker>
+          </div>
+        </div>
       </div>
     </div>
-    <router-view />
   </div>
 </template>
 
 <script>
-import { changeThemeColor } from './utils/color'
+import { changeThemeColor } from "./utils/color";
 const navList = [
   {
-    name: '首页',
-    path: '/home'
+    name: "首页",
+    path: "/home",
   },
   {
-    name: '表单',
-    path: '/form'
+    name: "表单",
+    path: "/form",
   },
   {
-    name: '其他表单',
-    path: '/others'
-  }
-]
+    name: "其他表单",
+    path: "/others",
+  },
+];
 export default {
-  name: 'App',
-  data () {
+  name: "App",
+  data() {
     return {
       navArr: navList,
-      activeIndex: '/home',
-      themeColor: sessionStorage.getItem('themeColor') || '#409EFF'
-    }
+      activeIndex: "/home",
+      theme: [
+        { name: "--color-primary", value: "#409EFF" },
+        { name: "--color-success", value: "#67C23A" },
+        { name: "--color-warning", value: "#E6A23C" },
+        { name: "--color-danger", value: "#F56C6C" },
+        { name: "--color-info", value: "#909399" },
+      ],
+    };
   },
-  mounted() {
-    // 刷新浏览器设置主题
-    changeThemeColor(this.themeColor)
-    this.setRootColor(this.themeColor)
-  },
+  mounted() {},
   methods: {
-    setRootColor (color) {
-      // 获取全局 css 变量
-      // getComputedStyle(document.documentElement).getPropertyValue(`--primary-color`)
-      // 设置 css 变量
-      document.documentElement.style.setProperty('--primary-color', color)
+    setRootColor(color) {
+      document.documentElement.style.setProperty("--primary-color", color);
     },
     // 手动设置主题
     handleChangeTheme(color) {
-      sessionStorage.setItem('themeColor', color)
-      changeThemeColor(color)
-      this.setRootColor(color)
-    }
-  }
-}
+      sessionStorage.setItem("themeColor", color);
+      changeThemeColor(color);
+      this.setRootColor(color);
+    },
+  },
+  computed: {
+    themeStyle() {
+      return this.theme.reduce((style, item) => {
+        style[item.name] = item.value;
+        return style;
+      }, {});
+    },
+  },
+};
 </script>
 
 <style scoped="scoped" lang="scss">
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-}
-.nav-top {
-  background-color: #000000;
-  height: 60px;
-  line-height: 60px;
-  .nav-logo {
-    float: left;
-    height: 60px;
-    margin-left: 100px;
-    img {
-      display: inline-block;
-      max-height: 40px;
-      vertical-align: middle;
+  display: flex;
+  padding: 24px;
+  .left {
+    flex-grow: 1;
+    margin-right: 24px;
+    .el-row + .el-row {
+      margin-top: 24px;
+    }
+    .el-tag + .el-tag {
+      margin-left: 24px;
+    }
+    .el-alert + .el-alert {
+      margin-top: 24px;
     }
   }
-}
-.nav-con {
-  float: left;
-  margin-left: 20px;
-  height: 60px;
-}
-.right {
-  float: right;
-  height: 60px;
-  margin-top: 0;
-  margin-right: 100px;
-  color: #42b983;
-  .choice-color {
-    vertical-align: middle;
+  .right {
+    .editor {
+      width: 285px;
+      background: #f5f7fa;
+      border: 1px solid #ebeef5;
+      border-radius: 5px;
+      padding: 16px;
+      .item {
+        & + .item {
+          margin-top: 16px;
+        }
+        .label {
+          margin-bottom: 8px;
+        }
+        .content {
+          display: flex;
+          .el-input {
+            margin-right: 16px;
+          }
+        }
+      }
+    }
   }
 }
 </style>
