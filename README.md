@@ -1,6 +1,6 @@
 # element2-theme-change
 
-### 设置颜色
+### 设置颜色主题
 https://blog.csdn.net/IICOOM/article/details/130348471
 
 ### 将node-sass换成dart-css
